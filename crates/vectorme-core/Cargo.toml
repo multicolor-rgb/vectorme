@@ -1,0 +1,26 @@
+[package]
+name = "vectorme-core"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "Raster-to-SVG tracing core for Vectorme"
+
+[dependencies]
+base64 = "0.22"
+image = { version = "0.25", default-features = false, features = [
+  "bmp",
+  "gif",
+  "ico",
+  "jpeg",
+  "png",
+  "tga",
+  "tiff",
+  "webp",
+] }
+serde = { version = "1", features = ["derive"] }
+thiserror = "2"
+visioncortex = "0.8.9"
+vtracer = "0.6.5"
+
+[dev-dependencies]
+tempfile = "3"
