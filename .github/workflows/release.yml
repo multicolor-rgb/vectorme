@@ -115,9 +115,15 @@ jobs:
           path: release-assets
           merge-multiple: true
 
+      - name: Flatten artifacts
+        run: |
+          mkdir -p release-flat
+          find release-assets -type f -exec cp -t release-flat {} +
+          ls -lh release-flat
+
       - name: Generate checksums
         run: |
-          cd release-assets
+          cd release-flat
           sha256sum * > SHA256SUMS.txt
           ls -lh
 
@@ -127,12 +133,12 @@ jobs:
           TAG: ${{ github.ref_name }}
         run: |
           if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release upload "$TAG" release-assets/* --clobber
+            gh release upload "$TAG" release-flat/* --clobber
             gh release edit "$TAG" \
               --title "Vectorme $TAG" \
               --notes-file .github/release-notes.md
           else
-            gh release create "$TAG" release-assets/* \
+            gh release create "$TAG" release-flat/* \
               --title "Vectorme $TAG" \
               --notes-file .github/release-notes.md \
               --verify-tag
